@@ -1,0 +1,2198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApexHatch | Premium Hatchbacks & Structural Frames</title>
+    <style>
+        /* CSS Reset & Variable Tokens */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Bahnschrift', -apple-system, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        :root {
+            --bg-main: #FFFFFF;
+            --bg-secondary: #F8F9FA;
+            --bg-tertiary: #F1F3F5;
+            --text-primary: #1A1B1F;
+            --text-secondary: #65676B;
+            --accent: #2563EB;
+            --accent-hover: #1D4ED8;
+            --border-color: #E2E8F0;
+            --shopify-black: #1A1B1F;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --transition: all 0.25s ease-in-out;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Base Component Utility Rules */
+        .container {
+            width: 100%;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Global Header Section */
+        header {
+            background-color: var(--bg-main);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .announcement-bar {
+            background-color: var(--shopify-black);
+            color: #FFFFFF;
+            text-align: center;
+            font-size: 13px;
+            padding: 8px 0;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            cursor: pointer;
+            color: var(--shopify-black);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-links li a:hover {
+            color: var(--accent);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            padding: 4px;
+        }
+
+        .nav-icon-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: var(--text-primary);
+            stroke-width: 2;
+            transition: var(--transition);
+        }
+
+        .nav-icon-btn:hover svg {
+            stroke: var(--accent);
+        }
+
+        .cart-count-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: var(--accent);
+            color: #FFFFFF;
+            font-size: 11px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Dynamic Main Workspace views */
+        main {
+            flex: 1;
+        }
+
+        .app-view {
+            display: none;
+        }
+
+        .app-view.active-view {
+            display: block;
+        }
+
+        /* Back Button Utility Header */
+        .view-navigation-bar {
+            padding: 16px 0;
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .back-link-btn {
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link-btn:hover {
+            color: var(--accent);
+        }
+
+        /* Shopify Home Page Hero Slider Layout */
+        .slider-wrapper {
+            position: relative;
+            height: 620px;
+            background-color: var(--bg-tertiary);
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            display: flex;
+            align-items: center;
+        }
+
+        .slide.active-slide {
+            opacity: 1;
+        }
+
+        .slide-img-layer {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.85);
+        }
+
+        .slide-content-card {
+            position: relative;
+            z-index: 10;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 48px;
+            margin-left: 80px;
+            border-radius: 2px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .slide-content-card h1 {
+            font-size: 42px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            line-height: 1.1;
+        }
+
+        .slide-content-card p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .shopify-btn {
+            display: inline-block;
+            background-color: var(--shopify-black);
+            color: #FFFFFF;
+            padding: 14px 28px;
+            text-transform: uppercase;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            border: 1px solid var(--shopify-black);
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .shopify-btn:hover {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .shopify-btn-secondary {
+            background-color: transparent;
+            color: var(--shopify-black);
+            border: 1px solid var(--shopify-black);
+        }
+
+        .shopify-btn-secondary:hover {
+            background-color: var(--shopify-black);
+            color: #FFFFFF;
+        }
+
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 20;
+            transition: var(--transition);
+        }
+
+        .slider-arrow:hover {
+            background: var(--shopify-black);
+        }
+
+        .slider-arrow:hover svg {
+            stroke: #FFFFFF;
+        }
+
+        .slider-arrow-prev { left: 24px; }
+        .slider-arrow-next { right: 24px; }
+
+        /* Featured Categories Workspace Layout */
+        .section-headline {
+            text-align: center;
+            margin: 64px 0 32px 0;
+            text-transform: uppercase;
+            font-size: 28px;
+            letter-spacing: 0.03em;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 64px;
+        }
+
+        .category-banner {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .category-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .category-banner:hover img {
+            transform: scale(1.04);
+        }
+
+        .category-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px;
+        }
+
+        .category-overlay h3 {
+            color: #FFFFFF;
+            font-size: 24px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        /* Unified Products Grid Showcase */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px 24px;
+            margin-bottom: 64px;
+        }
+
+        .product-card {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .product-card-img-holder {
+            position: relative;
+            height: 320px;
+            background-color: var(--bg-secondary);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .product-card-img-holder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .product-card-img-holder img {
+            transform: scale(1.03);
+        }
+
+        .product-card-meta h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .product-card-meta p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .product-card-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--shopify-black);
+        }
+
+        /* Product Detail Page (PDP) Dynamic Matrix */
+        .pdp-split {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 48px;
+            margin-top: 40px;
+            margin-bottom: 44px;
+        }
+
+        .pdp-gallery-frame img {
+            width: 100%;
+            height: 540px;
+            object-fit: cover;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .pdp-info-pane h2 {
+            font-size: 32px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .pdp-price-tag {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 24px;
+        }
+
+        .pdp-specs-matrix {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            padding: 16px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+
+        .spec-node {
+            font-size: 14px;
+        }
+
+        .spec-node span {
+            color: var(--text-secondary);
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .pdp-option-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: 0.05em;
+        }
+
+        .pdp-option-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-chip {
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #FFFFFF;
+            transition: var(--transition);
+        }
+
+        .option-chip.selected-chip {
+            border-color: var(--shopify-black);
+            background-color: var(--shopify-black);
+            color: #FFFFFF;
+        }
+
+        .shade-chip {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF;
+            outline: 1px solid var(--border-color);
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .shade-chip.selected-shade {
+            outline: 2px solid var(--accent);
+        }
+
+        .pdp-qty-selector {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            width: 130px;
+            height: 48px;
+            margin-bottom: 24px;
+        }
+
+        .qty-btn {
+            width: 40px;
+            height: 100%;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .qty-input {
+            width: 50px;
+            height: 100%;
+            border: none;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .qty-input::-webkit-outer-spin-button,
+        .qty-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Review Infrastructure System */
+        .pdp-reviews-block {
+            border-top: 1px solid var(--border-color);
+            padding-top: 32px;
+            margin-bottom: 64px;
+        }
+
+        .review-toggle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-secondary);
+            padding: 16px 24px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .review-toggle-header h3 {
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .review-toggle-icon {
+            font-size: 18px;
+            font-weight: bold;
+            transition: transform 0.2s ease;
+        }
+
+        .review-toggle-header.expanded-reviews .review-toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .reviews-expandable-content {
+            display: none;
+            padding: 10px 0;
+        }
+
+        .reviews-expandable-content.show-reviews {
+            display: block;
+        }
+
+        .review-node {
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .review-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .review-author { font-weight: 700; }
+        .review-stars { color: #F59E0B; }
+        .review-body { color: var(--text-secondary); font-size: 15px; line-height: 1.5; }
+
+        .review-form {
+            background-color: var(--bg-secondary);
+            padding: 32px;
+            border: 1px solid var(--border-color);
+            margin-top: 32px;
+        }
+
+        .shopify-field-group {
+            margin-bottom: 20px;
+        }
+
+        .shopify-field-group label {
+            display: block;
+            font-size: 13px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .shopify-input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            background-color: #FFFFFF;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .shopify-input:focus {
+            border-color: var(--shopify-black);
+        }
+
+        /* Slide-out Shopify Drawer Mini-Cart */
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 200;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .drawer-overlay.drawer-open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mini-cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -440px;
+            width: 440px;
+            height: 100%;
+            background-color: var(--bg-main);
+            z-index: 210;
+            box-shadow: var(--shadow-md);
+            transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .drawer-overlay.drawer-open .mini-cart-drawer {
+            right: 0;
+        }
+
+        .drawer-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .drawer-header h3 {
+            text-transform: uppercase;
+            font-size: 18px;
+        }
+
+        .drawer-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .drawer-close svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--text-primary);
+        }
+
+        .drawer-body-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .mini-cart-item {
+            display: flex;
+            gap: 16px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .mini-cart-item img {
+            width: 80px;
+            height: 90px;
+            object-fit: cover;
+            background-color: var(--bg-secondary);
+        }
+
+        .mini-cart-item-info {
+            flex: 1;
+        }
+
+        .mini-cart-item-info h5 {
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .mini-cart-item-info p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .mini-cart-qty-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .mini-cart-remove-trigger {
+            background: none;
+            border: none;
+            color: #DC2626;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .drawer-footer {
+            padding: 24px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-secondary);
+        }
+
+        .drawer-subtotal {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        /* Full Shopping Cart Workspace View */
+        .cart-page-layout {
+            margin-top: 40px;
+            margin-bottom: 64px;
+        }
+
+        .cart-table-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--shopify-black);
+            text-transform: uppercase;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .cart-row-node {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            align-items: center;
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cart-product-cell {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .cart-product-cell img {
+            width: 90px;
+            height: 100px;
+            object-fit: cover;
+            background-color: var(--bg-secondary);
+        }
+
+        .cart-summary-block {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-top: 40px;
+        }
+
+        /* Checkout Form Infrastructure View */
+        .checkout-split-view {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 64px;
+            margin-top: 40px;
+            margin-bottom: 64px;
+        }
+
+        .checkout-summary-panel {
+            background-color: var(--bg-secondary);
+            padding: 40px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Customer Auth Portal Layout */
+        .auth-gate-box {
+            max-width: 480px;
+            margin: 80px auto;
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            background-color: #FFFFFF;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .auth-gate-box h3 {
+            text-transform: uppercase;
+            font-size: 22px;
+            margin-bottom: 24px;
+            text-align: center;
+            letter-spacing: 0.02em;
+        }
+
+        /* Customer Hub Account Dashboard Layout */
+        .account-hub-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 48px;
+            margin-top: 40px;
+            margin-bottom: 64px;
+        }
+
+        .account-sidebar-nav {
+            list-style: none;
+            border-right: 1px solid var(--border-color);
+            padding-right: 24px;
+        }
+
+        .account-nav-tab {
+            padding: 14px 18px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            transition: var(--transition);
+        }
+
+        .account-nav-tab.active-tab-node {
+            background-color: var(--shopify-black);
+            color: #FFFFFF;
+        }
+
+        .account-sub-panel {
+            display: none;
+        }
+
+        .account-sub-panel.active-panel-node {
+            display: block;
+        }
+
+        .shopify-data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            margin-top: 16px;
+        }
+
+        .shopify-data-table th, .shopify-data-table td {
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+
+        .shopify-data-table th {
+            background-color: var(--bg-secondary);
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        /* Structural Static Pages Frame */
+        .static-page-frame {
+            max-width: 800px;
+            margin: 60px auto;
+            line-height: 1.6;
+        }
+
+        .static-page-frame h2 {
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .static-page-frame p {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+
+        /* Custom UI Micro-Modal (Replacement for JS Alert) */
+        .custom-popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .custom-popup-overlay.popup-visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .custom-popup-modal {
+            background: #FFFFFF;
+            max-width: 400px;
+            width: 100%;
+            padding: 32px;
+            border-radius: 2px;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .custom-popup-modal h4 {
+            text-transform: uppercase;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .custom-popup-modal p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .popup-action-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+
+        /* Real-world Corporate Footer Grid Structure */
+        footer {
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 64px 0 32px 0;
+            margin-top: auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 48px;
+        }
+
+        .footer-column h5 {
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.05em;
+            margin-bottom: 20px;
+            color: var(--shopify-black);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-column ul li a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--accent);
+        }
+
+        .social-container {
+            margin-top: 16px;
+        }
+
+        .social-row {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .social-icon-anchor {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .social-icon-anchor svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .social-icon-anchor:hover svg {
+            fill: var(--accent);
+        }
+
+        .footer-bottom-bar {
+            border-top: 1px solid var(--border-color);
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Layout Matrix */
+        @media (max-width: 1024px) {
+            .products-grid { grid-template-columns: repeat(3, 1fr); }
+            .pdp-split { grid-template-columns: 1fr; }
+            .pdp-gallery-frame img { height: 400px; }
+            .checkout-split-view { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .category-grid { grid-template-columns: 1fr; }
+            .products-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+            .slide-content-card { margin-left: 24px; margin-right: 24px; padding: 24px; }
+            .account-hub-grid { grid-template-columns: 1fr; }
+            .cart-table-header, .cart-row-node { grid-template-columns: 1.5fr 1fr 0.5fr; }
+            .cart-header-total, .cart-cell-total { display: none; }
+            .mini-cart-drawer { width: 100%; right: -100%; }
+        }
+
+        @media (max-width: 480px) {
+            .products-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .slider-wrapper { height: 480px; }
+            .slide-content-card h1 { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Shopify Announcement Bar Component -->
+    <div class="announcement-bar">
+        Free Delivery on All Cars | Special Rates From 2.9% Interest
+    </div>
+
+    <!-- Navigation Header -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo" onclick="navigateTo('home-view')">APEXHATCH</div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a onclick="navigateTo('home-view')">Home</a></li>
+                    <li><a onclick="navigateTo('category-view')">Catalog</a></li>
+                    <li><a onclick="navigateTo('about-view')">About Us</a></li>
+                    <li><a onclick="navigateTo('blog-view')">Blog</a></li>
+                    <li><a onclick="navigateTo('contact-view')">Contact Us</a></li>
+                </ul>
+            </nav>
+            <div class="nav-actions">
+                <button class="nav-icon-btn" onclick="handleAccountNavigation()">
+                    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </button>
+                <button class="nav-icon-btn" onclick="toggleMiniCart(true)">
+                    <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    <span class="cart-count-badge" id="global-cart-counter">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Global Back Button Container (shows on all views except homepage) -->
+    <div id="global-nav-bar" class="view-navigation-bar" style="display: none;">
+        <div class="container">
+            <button class="back-link-btn" onclick="navigateBack()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                Go Back to Previous Page
+            </button>
+        </div>
+    </div>
+
+    <main>
+        <!-- VIEW: HOMEPAGE -->
+        <div id="home-view" class="app-view active-view">
+            <!-- Shopify Hero Slider -->
+            <div class="slider-wrapper">
+                <div class="slide active-slide">
+                    <img class="slide-img-layer" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=80">
+                    <div class="slide-content-card">
+                        <h1>Premium Luxury Hatchbacks</h1>
+                        <p>Discover beautiful high-performance hatchbacks from top brands like Porsche, BMW, and Mercedes-Benz. Built with amazing style and comfort.</p>
+                        <button class="shopify-btn" onclick="navigateTo('category-view')">View Cars</button>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img class="slide-img-layer" src="https://images.unsplash.com/photo-1542282088-fe8426682b8f?auto=format&fit=crop&w=1600&q=80">
+                    <div class="slide-content-card">
+                        <h1>Strong Car Frames & Chassis</h1>
+                        <p>Explore high-strength rolling chassis designs and bare frame layouts built for heavy testing, track upgrades, and premium engineering.</p>
+                        <button class="shopify-btn" onclick="navigateTo('category-view')">View Frames</button>
+                    </div>
+                </div>
+                <div class="slider-arrow slider-arrow-prev" onclick="rotateSlides(-1)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </div>
+                <div class="slider-arrow slider-arrow-next" onclick="rotateSlides(1)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+            </div>
+
+            <!-- Home Promo Category Banners -->
+            <div class="container">
+                <h2 class="section-headline">Shop By Category</h2>
+                <div class="category-grid">
+                    <div class="category-banner" onclick="loadCategoryFiltered('hatchback')">
+                        <img src="https://images.unsplash.com/photo-1619330255191-11b3e100d4c6?auto=format&fit=crop&w=800&q=80">
+                        <div class="category-overlay">
+                            <h3>Complete Hatchbacks</h3>
+                            <div><span class="shopify-btn shopify-btn-secondary">Browse Cars</span></div>
+                        </div>
+                    </div>
+                    <div class="category-banner" onclick="loadCategoryFiltered('frame')">
+                        <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80">
+                        <div class="category-overlay">
+                            <h3>Car Frames & Chassis</h3>
+                            <div><span class="shopify-btn shopify-btn-secondary">Browse Frames</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: DYNAMIC CATALOG PAGE -->
+        <div id="category-view" class="app-view">
+            <div class="container">
+                <h2 class="section-headline" id="catalog-title">Our Car Catalog</h2>
+                <div class="products-grid" id="catalog-injection-point"></div>
+            </div>
+        </div>
+
+        <!-- VIEW: PRODUCT DETAIL PAGE (PDP) -->
+        <div id="pdp-view" class="app-view">
+            <div class="container">
+                <div class="pdp-split" id="pdp-injection-point"></div>
+                
+                <!-- Product Review Domain Ecosystem -->
+                <div class="pdp-reviews-block">
+                    <div class="review-toggle-header" id="reviews-accordion-bar" onclick="toggleReviewsAccordion()">
+                        <h3>Customer Reviews & feedback</h3>
+                        <span class="review-toggle-icon" id="reviews-accordion-icon">▲</span>
+                    </div>
+                    
+                    <div class="reviews-expandable-content" id="reviews-content-panel">
+                        <div id="reviews-list-target"></div>
+                        
+                        <div class="review-form">
+                            <h4 style="text-transform: uppercase; margin-bottom: 20px; font-size:16px;">Write a New Review</h4>
+                            <form id="pdp-review-native-form" onsubmit="handleReviewSubmission(event)">
+                                <div class="shopify-field-group">
+                                    <label>Your Name</label>
+                                    <input type="text" id="review-form-author" class="shopify-input" required>
+                                </div>
+                                <div class="shopify-field-group">
+                                    <label>Rating Score</label>
+                                    <select id="review-form-rating" class="shopify-input">
+                                        <option value="5">5 Stars - Excellent car</option>
+                                        <option value="4">4 Stars - Very good car</option>
+                                        <option value="3">3 Stars - Good enough</option>
+                                    </select>
+                                </div>
+                                <div class="shopify-field-group">
+                                    <label>Your Comments</label>
+                                    <textarea id="review-form-body" class="shopify-input" rows="4" required></textarea>
+                                </div>
+                                <button type="submit" class="shopify-btn">Add My Review</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: CART OVERVIEW PAGE -->
+        <div id="cart-view" class="app-view">
+            <div class="container cart-page-layout">
+                <h2 class="section-headline" style="text-align: left;">Your Shopping Cart</h2>
+                <div class="cart-table-header">
+                    <div>Product Details</div>
+                    <div>Price</div>
+                    <div>Quantity</div>
+                    <div class="cart-header-total" style="text-align: right;">Total Price</div>
+                </div>
+                <div id="cart-items-page-target"></div>
+                <div class="cart-summary-block" id="cart-summary-page-target"></div>
+            </div>
+        </div>
+
+        <!-- VIEW: CHECKOUT INTERFACE -->
+        <div id="checkout-view" class="app-view">
+            <div class="container checkout-split-view">
+                <div>
+                    <h3 style="text-transform: uppercase; margin-bottom: 24px; font-size:18px; border-bottom: 1px solid var(--border-color); padding-bottom:12px;">Shipping Address Details</h3>
+                    <form onsubmit="executeCheckoutOrder(event)">
+                        <div class="shopify-field-group">
+                            <label>Email Address</label>
+                            <input type="email" class="shopify-input" value="test_user@example.com" required>
+                        </div>
+                        <div style="display: grid; grid-template-columns:1fr 1fr; gap:16px;">
+                            <div class="shopify-field-group">
+                                <label>First Name</label>
+                                <input type="text" class="shopify-input" value="Alex" required>
+                            </div>
+                            <div class="shopify-field-group">
+                                <label>Last Name</label>
+                                <input type="text" class="shopify-input" value="Smith" required>
+                            </div>
+                        </div>
+                        <div class="shopify-field-group">
+                            <label>Street Address</label>
+                            <input type="text" class="shopify-input" value="742 Test Drive Street" required>
+                        </div>
+                        <div style="display: grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+                            <div class="shopify-field-group">
+                                <label>City</label>
+                                <input type="text" class="shopify-input" value="Tech City" required>
+                            </div>
+                            <div class="shopify-field-group">
+                                <label>State</label>
+                                <input type="text" class="shopify-input" value="CA" required>
+                            </div>
+                            <div class="shopify-field-group">
+                                <label>Zip Code</label>
+                                <input type="text" class="shopify-input" value="94012" required>
+                            </div>
+                        </div>
+                        <h3 style="text-transform: uppercase; margin: 32px 0 24px 0; font-size:18px; border-bottom: 1px solid var(--border-color); padding-bottom:12px;">Payment Method</h3>
+                        <div class="shopify-field-group" style="border: 1px solid var(--shopify-black); padding: 20px; background-color: var(--bg-secondary);">
+                            <label style="display: flex; align-items: center; gap: 10px;">
+                                <input type="radio" checked> **Sandbox Simulation Account (Instant Payment)**
+                            </label>
+                        </div>
+                        <button type="submit" class="shopify-btn" style="width:100%; margin-top:16px;">Place My Order</button>
+                    </form>
+                </div>
+                <div class="checkout-summary-panel" id="checkout-summary-injection-point"></div>
+            </div>
+        </div>
+
+        <!-- VIEW: ACCOUNT ROUTING GATE (LOGIN / SIGNUP) -->
+        <div id="auth-view" class="app-view">
+            <div class="container">
+                <div class="auth-gate-box">
+                    <h3>Sign In to Your Account</h3>
+                    <form onsubmit="processClientMockAuth(event)">
+                        <div class="shopify-field-group">
+                            <label>Email Address</label>
+                            <input type="email" class="shopify-input" id="auth-email-input" value="tester_account@apex.com" required>
+                        </div>
+                        <div class="shopify-field-group">
+                            <label>Password</label>
+                            <input type="password" class="shopify-input" id="auth-pass-input" value="password123" required>
+                        </div>
+                        <button type="submit" class="shopify-btn" style="width:100%; margin-bottom: 16px;">Login</button>
+                        <p style="text-align: center; font-size:13px; color: var(--text-secondary);">
+                            Don't have an account? <a style="color: var(--accent); cursor:pointer;">Create account</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: SYSTEM LOGGED IN ACCOUNT HUB -->
+        <div id="account-view" class="app-view">
+            <div class="container">
+                <h2 class="section-headline" style="text-align: left;">My Account</h2>
+                <div class="account-hub-grid">
+                    <ul class="account-sidebar-nav">
+                        <li class="account-nav-tab active-tab-node" onclick="switchAccountDashboardTab('orders-panel', this)">My Orders</li>
+                        <li class="account-nav-tab" onclick="switchAccountDashboardTab('address-panel', this)">My Address</li>
+                        <li class="account-nav-tab" onclick="switchAccountDashboardTab('info-panel', this)">Account Info</li>
+                        <li class="account-nav-tab" onclick="executeClientLogout()" style="color:#DC2626; border-top:1px solid var(--border-color); margin-top:24px;">Logout</li>
+                    </ul>
+                    <div>
+                        <div id="orders-panel" class="account-sub-panel active-panel-node">
+                            <h3 style="text-transform: uppercase; font-size: 16px; margin-bottom:16px;">Order History</h3>
+                            <table class="shopify-data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Date</th>
+                                        <th>Payment Status</th>
+                                        <th>Shipping Status</th>
+                                        <th>Total Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>#APEX-9081</strong></td>
+                                        <td>June 02, 2026</td>
+                                        <td><span style="color:#16A34A; font-weight:bold;">Paid</span></td>
+                                        <td>In Transit</td>
+                                        <td>$85,000.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>#APEX-7731</strong></td>
+                                        <td>April 14, 2026</td>
+                                        <td><span style="color:#16A34A; font-weight:bold;">Paid</span></td>
+                                        <td>Delivered</td>
+                                        <td>$42,000.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="address-panel" class="account-sub-panel">
+                            <h3 style="text-transform: uppercase; font-size: 16px; margin-bottom:16px;">Primary Shipping Address</h3>
+                            <div style="background-color: var(--bg-secondary); padding: 24px; border: 1px solid var(--border-color); line-height: 1.6;">
+                                <p><strong>Alex Smith</strong></p>
+                                <p>742 Test Drive Street</p>
+                                <p>Building C, Area 9</p>
+                                <p>Tech City, CA, 94012</p>
+                                <p>United States</p>
+                                <p>Phone: +1 (555) 019-2831</p>
+                                <button class="shopify-btn shopify-btn-secondary" style="margin-top:16px; padding: 8px 16px; font-size:12px;">Edit Address</button>
+                            </div>
+                        </div>
+                        <div id="info-panel" class="account-sub-panel">
+                            <h3 style="text-transform: uppercase; font-size: 16px; margin-bottom:16px;">Account Details</h3>
+                            <div style="background-color: var(--bg-secondary); padding: 24px; border: 1px solid var(--border-color); line-height: 1.8;">
+                                <p><strong>Full Name:</strong> Alex Smith</p>
+                                <p><strong>Email Address:</strong> tester_account@apex.com</p>
+                                <p><strong>Account Type:</strong> QA Test Administrator</p>
+                                <p><strong>Status:</strong> Active Verified Account</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: ABOUT PAGE -->
+        <div id="about-view" class="app-view">
+            <div class="container static-page-frame">
+                <h2>About Our Company</h2>
+                <p>Welcome to ApexHatch. We build and supply top-quality hot hatchbacks and performance car frames for car lovers and engineers around the world.</p>
+                <p>Every single car model and steel chassis frame in our collection is carefully tested to meet the highest safety, style, and performance standards. We want to give you the absolute best driving experience possible.</p>
+            </div>
+        </div>
+
+        <!-- VIEW: JOURNAL BLOG PAGE -->
+        <div id="blog-view" class="app-view">
+            <div class="container static-page-frame">
+                <h2>Our Automotive Blog</h2>
+                <div style="border-bottom:1px solid var(--border-color); padding-bottom:32px; margin-bottom:32px;">
+                    <h3 style="text-transform: uppercase; font-size:18px; margin-bottom:8px;">How to Choose the Right Car Frame for Your Vehicle</h3>
+                    <p style="font-size:12px; color:var(--accent); margin-bottom:12px;">PUBLISHED JUNE 01, 2026 | BY APEX TEAM</p>
+                    <p>When you are upgrading a car, finding the correct base frame layout is very important. In this post, we discuss the differences between aluminum frames and heavy carbon-fiber structures...</p>
+                </div>
+                <div style="border-bottom:1px solid var(--border-color); padding-bottom:32px; margin-bottom:32px;">
+                    <h3 style="text-transform: uppercase; font-size:18px; margin-bottom:8px;">Why Hatchbacks are the Best Option for Daily Driving</h3>
+                    <p style="font-size:12px; color:var(--accent); margin-bottom:12px;">PUBLISHED MAY 18, 2026 | BY CAR LOVERS JOURNAL</p>
+                    <p>Hatchbacks give you the perfect mix of sport racing speed and huge trunk space utility. We look closely at why high-end brands are releasing new sport hatchback designs this year.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: CONCIERGE CONTACT PAGE -->
+        <div id="contact-view" class="app-view">
+            <div class="container static-page-frame" style="max-width:600px;">
+                <h2>Contact Us</h2>
+                <form onsubmit="event.preventDefault(); openCustomPopup('Message Sent', 'Your support message has been sent to our customer care team successfully.');">
+                    <div class="shopify-field-group">
+                        <label>Your Full Name</label>
+                        <input type="text" class="shopify-input" required>
+                    </div>
+                    <div class="shopify-field-group">
+                        <label>Your Email Address</label>
+                        <input type="email" class="shopify-input" required>
+                    </div>
+                    <div class="shopify-field-group">
+                        <label>Your Message</label>
+                        <textarea class="shopify-input" rows="6" required></textarea>
+                    </div>
+                    <button type="submit" class="shopify-btn" style="width:100%;">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Slide-out Shopify Drawer Mini-Cart Infrastructure Components -->
+    <div class="drawer-overlay" id="global-mini-cart-overlay-node" onclick="toggleMiniCart(false)">
+        <div class="mini-cart-drawer" onclick="event.stopPropagation()">
+            <div class="drawer-header">
+                <h3>Shopping Drawer Cart</h3>
+                <button class="drawer-close" onclick="toggleMiniCart(false)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="drawer-body-items" id="mini-cart-items-injection-point"></div>
+            <div class="drawer-footer">
+                <div class="drawer-subtotal">
+                    <span>Subtotal</span>
+                    <span id="mini-cart-subtotal-target">$0.00</span>
+                </div>
+                <button class="shopify-btn" style="width: 100%; text-align: center; margin-bottom: 12px;" onclick="toggleMiniCart(false); navigateTo('cart-view');">View Full Cart Page</button>
+                <button class="shopify-btn shopify-btn-secondary" style="width: 100%; text-align: center;" onclick="toggleMiniCart(false); navigateTo('checkout-view');">Go To Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Micro-Modal Popup Node System (No Alert Fallbacks) -->
+    <div class="custom-popup-overlay" id="custom-global-popup-system">
+        <div class="custom-popup-modal">
+            <h4 id="popup-title-target">Alert Message</h4>
+            <p id="popup-body-target">Action completed successfully.</p>
+            <div class="popup-action-row" id="popup-action-row-target">
+                <button class="shopify-btn" style="padding: 10px 24px; font-size:12px;" onclick="closeCustomPopup()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Corporate Footer Grid Structure -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h5>Our Inventory</h5>
+                    <ul>
+                        <li><a onclick="loadCategoryFiltered('hatchback')">Complete Hatchbacks</a></li>
+                        <li><a onclick="loadCategoryFiltered('frame')">Car Frames & Chassis</a></li>
+                        <li><a onclick="navigateTo('category-view')">All Products</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h5>Information</h5>
+                    <ul>
+                        <li><a onclick="navigateTo('about-view')">About Us</a></li>
+                        <li><a onclick="navigateTo('blog-view')">Automotive Blog</a></li>
+                        <li><a onclick="navigateTo('contact-view')">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h5>Store Policies</h5>
+                    <ul>
+                        <li><a>Terms of Service</a></li>
+                        <li><a>Payment Protocols</a></li>
+                        <li><a>Shipping & Tracking</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h5>Follow Us</h5>
+                    <p style="font-size:14px; color:var(--text-secondary); line-height:1.4; margin-bottom:16px;">Stay updated with our latest car releases and discount events.</p>
+                    <div class="social-container">
+                        <div class="social-row">
+                            <a class="social-icon-anchor">
+                                <svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+                            </a>
+                            <a class="social-icon-anchor">
+                                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                            </a>
+                            <a class="social-icon-anchor">
+                                <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom-bar">
+                <div>&copy; 2026 APEXHATCH Automotive Distribution Network. All Rights Reserved.</div>
+                <div>Shopify Theme Architecture Matrix Engine v4.2.1-QA</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Comprehensive Modular JavaScript Application Layer -->
+    <script>
+        /* EXPANDED INVENTORY REPOSITORY (10 PREMIUM PRODUCTS WITH REAL CAR VALUES) */
+        const INVENTORY_DATA_SET = [
+            {
+                id: "prod-hatch-01",
+                name: "BMW M135i xDrive Hatchback",
+                category: "hatchback",
+                price: 48500.00,
+                img: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80",
+                description: "A fast and beautiful sports hatchback from BMW. Features all-wheel drive, premium sports tuning, and top interior layouts.",
+                mileage: "34.2 MPG Combined",
+                color: "Misano Racing Blue Metallic",
+                cc: "1998cc 4-Cylinder Turbocharged",
+                sizes: ["Standard 5-Door Layout", "Sport 3-Door Chassis"],
+                shades: ["#2563EB", "#1E293B", "#64748B"],
+                reviews: [
+                    { author: "Mark Wilson", rating: 5, body: "Amazing handling around tight corners. Highly recommend the 5-door layout!" }
+                ]
+            },
+            {
+                id: "prod-hatch-02",
+                name: "Mercedes-Benz A45 AMG Sport",
+                category: "hatchback",
+                price: 62000.00,
+                img: "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=600&q=80",
+                description: "The most powerful high-end luxury hot hatch from Mercedes-Benz. Hand-crafted engine layout with aggressive styling lines.",
+                mileage: "29.4 MPG Combined",
+                color: "Designo Matte Gray Coating",
+                cc: "1991cc Turbocharged AMG Unit",
+                sizes: ["Standard 5-Door Layout", "Widebody Track Edition"],
+                shades: ["#71717A", "#0F172A", "#E2E8F0"],
+                reviews: [
+                    { author: "Sarah Jenkins", rating: 5, body: "This car is faster than most sports supercars. Interior dashboard looks stunning." }
+                ]
+            },
+            {
+                id: "prod-hatch-03",
+                name: "Porsche Panamera E-Hybrid Hatch",
+                category: "hatchback",
+                price: 94000.00,
+                img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80",
+                description: "Luxury meets clean electric hybrid power. A spacious, high-end 5-door performance hatch with smooth acceleration.",
+                mileage: "48.2 MPG Efficiency Mode",
+                color: "Carrera White Pearl Gloss",
+                cc: "2894cc V6 Twin-Turbo Hybrid",
+                sizes: ["Standard Executive Layout"],
+                shades: ["#F8F9FA", "#1E1B4B", "#B91C1C"],
+                reviews: []
+            },
+            {
+                id: "prod-hatch-04",
+                name: "Chevrolet Bolt EV Electric Hatchback",
+                category: "hatchback",
+                price: 28000.00,
+                img: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80",
+                description: "A fully electric city hatchback with a highly spacious interior, long range charge life, and modern driving tools.",
+                mileage: "120 MPG Equivalent Range",
+                color: "Bright Ice Silver Metallic",
+                cc: "Fully Electric 150kW Motor Matrix",
+                sizes: ["Standard 5-Door Layout"],
+                shades: ["#CBD5E1", "#1E293B", "#2563EB"],
+                reviews: []
+            },
+            {
+                id: "prod-hatch-05",
+                name: "Ferrari GTC4Lusso Shooting Brake",
+                category: "hatchback",
+                price: 260000.00,
+                img: "https://images.unsplash.com/photo-1592853625527-711ba8543b14?auto=format&fit=crop&w=600&q=80",
+                description: "Ferrari's grand touring hatchback model. Combines intense V12 luxury speed with a unique premium cargo hatchback build.",
+                mileage: "15.3 MPG Highway",
+                color: "Rosso Corsa Racing Red",
+                cc: "6262cc V12 High Power Engine",
+                sizes: ["Standard 3-Door Sport Layout"],
+                shades: ["#DC2626", "#18181B", "#F59E0B"],
+                reviews: [
+                    { author: "David Vance", rating: 5, body: "A beautiful exotic masterpiece. Incredible sound from the engine exhaust system." }
+                ]
+            },
+            {
+                id: "prod-hatch-06",
+                name: "Lamborghini Urus Sport Hatch Variant",
+                category: "hatchback",
+                price: 230000.00,
+                img: "https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?auto=format&fit=crop&w=600&q=80",
+                description: "Custom lowering layout variant mimicking hyper hatchback geometry under an official Lamborghini racing plan.",
+                mileage: "17.2 MPG Average",
+                color: "Giallo Auge Solar Yellow",
+                cc: "4000cc V8 Twin-Turbo",
+                sizes: ["Standard 5-Door Layout"],
+                shades: ["#F59E0B", "#172554", "#27272A"],
+                reviews: []
+            },
+            {
+                id: "prod-hatch-07",
+                name: "Aston Martin Vantage Shooting Brake",
+                category: "hatchback",
+                price: 145000.00,
+                img: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=600&q=80",
+                description: "Custom ordered wide hatchback style. Combines true British luxury design with a beautiful rear door trunk build.",
+                mileage: "22.1 MPG Combined",
+                color: "British Racing Metallic Green",
+                cc: "4000cc V8 Twin-Turbo Unit",
+                sizes: ["Standard 3-Door Sport Layout"],
+                shades: ["#14532D", "#1E293B", "#E2E8F0"],
+                reviews: []
+            },
+            {
+                id: "prod-hatch-08",
+                name: "Bugatti Tourer Hatchback Concept",
+                category: "hatchback",
+                price: 850000.00,
+                img: "https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?auto=format&fit=crop&w=600&q=80",
+                description: "Exclusive collector edition hatchback layout designed for top tier speed, rich leather seating, and custom trim.",
+                mileage: "11.4 MPG Average",
+                color: "Atlantic Royal Deep Blue",
+                cc: "8000cc W16 Quad-Turbo Hybrid",
+                sizes: ["Standard 3-Door Sport Layout"],
+                shades: ["#1E3A8A", "#0F172A", "#FFFFFF"],
+                reviews: []
+            },
+            {
+                id: "prod-frame-01",
+                name: "Apex Carbon Steel Hatchback Frame",
+                category: "frame",
+                price: 8500.00,
+                img: "https://static-01.extrica.com/articles/15775/15775-img3.jpg",
+                description: "High-grade carbon steel base frame welded safely for custom hatchback vehicle building projects.",
+                mileage: "N/A - Bare Structural Unit",
+                color: "Unpainted Steel Metallic Finish",
+                cc: "Fits Engines Up to 5000cc Layouts",
+                sizes: ["Scale 1:18 Precision Spec", "Full-Size Production Frame"],
+                shades: ["#18181B", "#71717A"],
+                reviews: [
+                    { author: "QA Lead Evaluator", rating: 5, body: "Perfect welding points. Fits the engine blocks beautifully inside all mock test runs." }
+                ]
+            },
+            {
+                id: "prod-frame-02",
+                name: "Billet Aluminum Rolling Chassis Frame",
+                category: "frame",
+                price: 12500.00,
+                img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=600&q=80",
+                description: "Lightweight aircraft-grade aluminum rolling chassis with full suspension bars and pre-installed brake brackets.",
+                mileage: "N/A - Bare Structural Unit",
+                color: "Anodized Silver Anti-Rust Coating",
+                cc: "Fits Engines Up to 4000cc Layouts",
+                sizes: ["Scale 1:18 Precision Spec", "Full-Size Production Frame"],
+                shades: ["#CBD5E1", "#475569"],
+                reviews: []
+            }
+        ];
+
+        /* GLOBAL STATE DATA STORAGE STRUCTURE */
+        let CLIENT_SHOPPING_CART = [];
+        let CURRENT_ACTIVE_VIEW_ID = "home-view";
+        let VIEW_NAVIGATION_HISTORY = ["home-view"];
+        let HERO_SLIDER_INDEX = 0;
+        let CURRENT_ACTIVE_PDP_PRODUCT = null;
+        let USER_AUTHENTICATION_STATUS = false;
+        let REVIEWS_ACCORDION_EXPANDED = true;
+
+        /* APPLICATION STATE CONTROLLER BOOT ROUTINE */
+        document.addEventListener("DOMContentLoaded", () => {
+            initializeProductCatalogGrid();
+            initializeHeroSliderLoop();
+        });
+
+        /* GLOBAL VIEW ROUTING ENGINE WITH HISTORY NAVIGATION */
+        function navigateTo(targetViewId) {
+            const currentViewNode = document.getElementById(CURRENT_ACTIVE_VIEW_ID);
+            const targetViewNode = document.getElementById(targetViewId);
+            
+            if (currentViewNode && targetViewNode) {
+                currentViewNode.classList.remove("active-view");
+                targetViewNode.classList.add("active-view");
+                
+                // Add to history if it's a new step
+                if (VIEW_NAVIGATION_HISTORY[VIEW_NAVIGATION_HISTORY.length - 1] !== targetViewId) {
+                    VIEW_NAVIGATION_HISTORY.push(targetViewId);
+                }
+
+                CURRENT_ACTIVE_VIEW_ID = targetViewId;
+                
+                // Toggle back button display bar
+                const navBarNode = document.getElementById("global-nav-bar");
+                if (targetViewId === "home-view") {
+                    navBarNode.style.display = "none";
+                } else {
+                    navBarNode.style.display = "block";
+                }
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function navigateBack() {
+            if (VIEW_NAVIGATION_HISTORY.length > 1) {
+                VIEW_NAVIGATION_HISTORY.pop(); // Remove current view node
+                const previousViewId = VIEW_NAVIGATION_HISTORY[VIEW_NAVIGATION_HISTORY.length - 1];
+                
+                // Route safely to previous screen
+                const currentViewNode = document.getElementById(CURRENT_ACTIVE_VIEW_ID);
+                const targetViewNode = document.getElementById(previousViewId);
+                
+                if (currentViewNode && targetViewNode) {
+                    currentViewNode.classList.remove("active-view");
+                    targetViewNode.classList.add("active-view");
+                    CURRENT_ACTIVE_VIEW_ID = previousViewId;
+
+                    const navBarNode = document.getElementById("global-nav-bar");
+                    if (previousViewId === "home-view") {
+                        navBarNode.style.display = "none";
+                    } else {
+                        navBarNode.style.display = "block";
+                    }
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            } else {
+                navigateTo('home-view');
+            }
+        }
+
+        /* AUTO ACTION SECURE ROUTING GATE */
+        function handleAccountNavigation() {
+            if (USER_AUTHENTICATION_STATUS) {
+                navigateTo('account-view');
+            } else {
+                navigateTo('auth-view');
+            }
+        }
+
+        /* SHOPIFY SLIDER ENGINE ANIMATION SEQUENCE */
+        function initializeHeroSliderLoop() {
+            setInterval(() => {
+                rotateSlides(1);
+            }, 6000);
+        }
+
+        function rotateSlides(directionStep) {
+            const slidesArray = document.querySelectorAll(".slide");
+            if(slidesArray.length === 0) return;
+            slidesArray[HERO_SLIDER_INDEX].classList.remove("active-slide");
+            
+            HERO_SLIDER_INDEX += directionStep;
+            if (HERO_SLIDER_INDEX >= slidesArray.length) HERO_SLIDER_INDEX = 0;
+            if (HERO_SLIDER_INDEX < 0) HERO_SLIDER_INDEX = slidesArray.length - 1;
+            
+            slidesArray[HERO_SLIDER_INDEX].classList.add("active-slide");
+        }
+
+        /* DATA GRID INJECTION CORE BUILDER */
+        function initializeProductCatalogGrid() {
+            renderCatalogCollection(INVENTORY_DATA_SET);
+        }
+
+        function renderCatalogCollection(itemsList) {
+            const insertionPointNode = document.getElementById("catalog-injection-point");
+            insertionPointNode.innerHTML = "";
+
+            itemsList.forEach(productNode => {
+                const cardElement = document.createElement("div");
+                cardElement.className = "product-card";
+                cardElement.onclick = () => launchProductDetailPage(productNode.id);
+
+                cardElement.innerHTML = `
+                    <div class="product-card-img-holder">
+                        <img src="${productNode.img}">
+                    </div>
+                    <div class="product-card-meta">
+                        <h4>${productNode.name}</h4>
+                        <p>${productNode.color} | ${productNode.cc}</p>
+                        <div class="product-card-price">$${productNode.price.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
+                    </div>
+                `;
+                insertionPointNode.appendChild(cardElement);
+            });
+        }
+
+        function loadCategoryFiltered(categoryTypeFilter) {
+            document.getElementById("catalog-title").innerText = 
+                categoryTypeFilter === 'hatchback' ? "Complete Hatchbacks List" : "Car Frames & Chassis List";
+            
+            const targetedSubset = INVENTORY_DATA_SET.filter(item => item.category === categoryTypeFilter);
+            renderCatalogCollection(targetedSubset);
+            navigateTo('category-view');
+        }
+
+        /* REVIEWS ACCORDION EXPAND MECHANISM */
+        function toggleReviewsAccordion() {
+            REVIEWS_ACCORDION_EXPANDED = !REVIEWS_ACCORDION_EXPANDED;
+            const contentPanel = document.getElementById("reviews-content-panel");
+            const headerBar = document.getElementById("reviews-accordion-bar");
+            const iconNode = document.getElementById("reviews-accordion-icon");
+
+            if (REVIEWS_ACCORDION_EXPANDED) {
+                contentPanel.classList.add("show-reviews");
+                headerBar.classList.add("expanded-reviews");
+                iconNode.innerText = "▲";
+            } else {
+                contentPanel.classList.remove("show-reviews");
+                headerBar.classList.remove("expanded-reviews");
+                iconNode.innerText = "▼";
+            }
+        }
+
+        /* PRODUCT DETAIL PAGE INTERACTION ROUTINES */
+        function launchProductDetailPage(productIdCode) {
+            const matchProductNode = INVENTORY_DATA_SET.find(p => p.id === productIdCode);
+            if (!matchProductNode) return;
+
+            CURRENT_ACTIVE_PDP_PRODUCT = matchProductNode;
+            
+            // Re-sync view panel displays cleanly
+            document.querySelectorAll(".app-view").forEach(v => v.classList.remove("active-view"));
+            document.getElementById("pdp-view").classList.add("active-view");
+            
+            if (VIEW_NAVIGATION_HISTORY[VIEW_NAVIGATION_HISTORY.length - 1] !== 'pdp-view') {
+                VIEW_NAVIGATION_HISTORY.push('pdp-view');
+            }
+            CURRENT_ACTIVE_VIEW_ID = "pdp-view";
+            document.getElementById("global-nav-bar").style.display = "block";
+            window.scrollTo({ top: 0 });
+
+            const pdpTargetNode = document.getElementById("pdp-injection-point");
+            
+            let sizesElementsMarkup = "";
+            matchProductNode.sizes.forEach((sizeOption, index) => {
+                sizesElementsMarkup += `<div class="option-chip ${index === 0 ? 'selected-chip' : ''}" onclick="toggleOptionChipStyle(this)">${sizeOption}</div>`;
+            });
+
+            let shadesElementsMarkup = "";
+            matchProductNode.shades.forEach((shadeHexCode, index) => {
+                shadesElementsMarkup += `<div class="shade-chip ${index === 0 ? 'selected-shade' : ''}" style="background-color: ${shadeHexCode};" onclick="toggleShadeChipStyle(this)"></div>`;
+            });
+
+            pdpTargetNode.innerHTML = `
+                <div class="pdp-gallery-frame">
+                    <img src="${matchProductNode.img}">
+                </div>
+                <div class="pdp-info-pane">
+                    <h2>${matchProductNode.name}</h2>
+                    <div class="pdp-price-tag">$${matchProductNode.price.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
+                    
+                    <div class="pdp-specs-matrix">
+                        <div class="spec-node"><span>Engine Size</span>${matchProductNode.cc}</div>
+                        <div class="spec-node"><span>Paint Color</span>${matchProductNode.color}</div>
+                        <div class="spec-node"><span>Fuel Economy</span>${matchProductNode.mileage}</div>
+                        <div class="spec-node"><span>Category Class</span>${matchProductNode.category.toUpperCase()}</div>
+                    </div>
+
+                    <div class="pdp-option-title">Choose Frame Size / Options</div>
+                    <div class="pdp-option-selector">${sizesElementsMarkup}</div>
+
+                    <div class="pdp-option-title">Choose Exterior Color Paint</div>
+                    <div class="pdp-option-selector">${shadesElementsMarkup}</div>
+
+                    <div class="pdp-option-title">Select Quantity</div>
+                    <div class="pdp-qty-selector">
+                        <button class="qty-btn" onclick="adjustPdpQuantityValue(-1)">-</button>
+                        <input type="number" id="pdp-structural-qty-input" class="qty-input" value="1" min="1">
+                        <button class="qty-btn" onclick="adjustPdpQuantityValue(1)">+</button>
+                    </div>
+
+                    <button class="shopify-btn" style="width:100%; height:54px; margin-top:12px;" onclick="executeAddToCartWorkflow()">Add to Cart</button>
+                </div>
+            `;
+
+            // Enforce accordion view display on open
+            REVIEWS_ACCORDION_EXPANDED = true;
+            document.getElementById("reviews-content-panel").classList.add("show-reviews");
+            document.getElementById("reviews-accordion-bar").classList.add("expanded-reviews");
+            document.getElementById("reviews-accordion-icon").innerText = "▲";
+
+            renderPdpReviewsDataArray();
+        }
+
+        function toggleOptionChipStyle(clickedChipElement) {
+            clickedChipElement.parentElement.querySelectorAll(".option-chip").forEach(c => c.classList.remove("selected-chip"));
+            clickedChipElement.classList.add("selected-chip");
+        }
+
+        function toggleShadeChipStyle(clickedShadeElement) {
+            clickedShadeElement.parentElement.querySelectorAll(".shade-chip").forEach(s => s.classList.remove("selected-shade"));
+            clickedShadeElement.classList.add("selected-shade");
+        }
+
+        function adjustPdpQuantityValue(numericalStep) {
+            const quantityInputField = document.getElementById("pdp-structural-qty-input");
+            let calculatedCurrentValue = parseInt(quantityInputField.value) + numericalStep;
+            if (calculatedCurrentValue < 1) calculatedCurrentValue = 1;
+            quantityInputField.value = calculatedCurrentValue;
+        }
+
+        /* QUANTITY MUTATORS FOR CART CHANNELS */
+        function adjustCartItemQtyInline(cartIndexID, numericalChange) {
+            let itemNode = CLIENT_SHOPPING_CART[cartIndexID];
+            if(itemNode) {
+                itemNode.quantity += numericalChange;
+                if(itemNode.quantity < 1) {
+                    itemNode.quantity = 1;
+                }
+                synchronizeGlobalCartInterfaceState();
+            }
+        }
+
+        /* CORE SHOPPING CART CONTROLLER INFRASTRUCTURE */
+        function executeAddToCartWorkflow() {
+            const quantityToCommit = parseInt(document.getElementById("pdp-structural-qty-input").value);
+            const activeFormFactorSize = document.querySelector(".option-chip.selected-chip").innerText;
+            
+            const existingCartItemMatch = CLIENT_SHOPPING_CART.find(item => 
+                item.product.id === CURRENT_ACTIVE_PDP_PRODUCT.id && item.selectedSize === activeFormFactorSize
+            );
+
+            if (existingCartItemMatch) {
+                existingCartItemMatch.quantity += quantityToCommit;
+            } else {
+                CLIENT_SHOPPING_CART.push({
+                    product: CURRENT_ACTIVE_PDP_PRODUCT,
+                    quantity: quantityToCommit,
+                    selectedSize: activeFormFactorSize
+                });
+            }
+
+            synchronizeGlobalCartInterfaceState();
+            toggleMiniCart(true);
+        }
+
+        function synchronizeGlobalCartInterfaceState() {
+            let runningTotalQuantityCounter = 0;
+            let runningFinancialSubtotalValue = 0;
+
+            CLIENT_SHOPPING_CART.forEach(item => {
+                runningTotalQuantityCounter += item.quantity;
+                runningFinancialSubtotalValue += (item.product.price * item.quantity);
+            });
+
+            document.getElementById("global-cart-counter").innerText = runningTotalQuantityCounter;
+            
+            document.getElementById("mini-cart-subtotal-target").innerText = 
+                "$" + runningFinancialSubtotalValue.toLocaleString(undefined, {minimumFractionDigits: 2});
+
+            renderMiniCartDrawerDomTree();
+            renderFullCartPageDomTree();
+            renderCheckoutSummaryDomTree();
+        }
+
+        function toggleMiniCart(shouldDisplayCartDrawer) {
+            const drawerOverlayTargetNode = document.getElementById("global-mini-cart-overlay-node");
+            if (shouldDisplayCartDrawer) {
+                drawerOverlayTargetNode.classList.add("drawer-open");
+            } else {
+                drawerOverlayTargetNode.classList.remove("drawer-open");
+            }
+        }
+
+        function renderMiniCartDrawerDomTree() {
+            const structuralContainerNode = document.getElementById("mini-cart-items-injection-point");
+            structuralContainerNode.innerHTML = "";
+
+            if (CLIENT_SHOPPING_CART.length === 0) {
+                structuralContainerNode.innerHTML = `<p style="text-align:center; color:var(--text-secondary); margin-top:40px;">Your cart is completely empty.</p>`;
+                return;
+            }
+
+            CLIENT_SHOPPING_CART.forEach((cartItemNode, indexInCartArray) => {
+                const itemBlockWrapper = document.createElement("div");
+                itemBlockWrapper.className = "mini-cart-item";
+                itemBlockWrapper.innerHTML = `
+                    <img src="${cartItemNode.product.img}">
+                    <div class="mini-cart-item-info">
+                        <h5>${cartItemNode.product.name}</h5>
+                        <p>Option: ${cartItemNode.selectedSize}</p>
+                        <p>Price: $${cartItemNode.product.price.toLocaleString()}</p>
+                        
+                        <div class="mini-cart-qty-row">
+                            <div class="pdp-qty-selector" style="margin-bottom:0; height:32px; width:100px;">
+                                <button class="qty-btn" style="font-size:14px;" onclick="adjustCartItemQtyInline(${indexInCartArray}, -1)">-</button>
+                                <input type="text" class="qty-input" style="font-size:13px;" value="${cartItemNode.quantity}" readonly>
+                                <button class="qty-btn" style="font-size:14px;" onclick="adjustCartItemQtyInline(${indexInCartArray}, 1)">+</button>
+                            </div>
+                            <button class="mini-cart-remove-trigger" onclick="triggerDestructiveDeletionPopup(${indexInCartArray})">Delete</button>
+                        </div>
+                    </div>
+                `;
+                structuralContainerNode.appendChild(itemBlockWrapper);
+            });
+        }
+
+        /* FULL CART PAGE VIEW RENDER NODE */
+        function renderFullCartPageDomTree() {
+            const cartPageTargetPoint = document.getElementById("cart-items-page-target");
+            const cartSummaryTargetPoint = document.getElementById("cart-summary-page-target");
+            
+            cartPageTargetPoint.innerHTML = "";
+            cartSummaryTargetPoint.innerHTML = "";
+
+            if (CLIENT_SHOPPING_CART.length === 0) {
+                cartPageTargetPoint.innerHTML = `<p style="padding: 48px 0; color:var(--text-secondary);">Your shopping cart is currently empty.</p>`;
+                return;
+            }
+
+            let computedFinancialSubtotalValue = 0;
+
+            CLIENT_SHOPPING_CART.forEach((cartItemNode, indexInCartArray) => {
+                computedFinancialSubtotalValue += (cartItemNode.product.price * cartItemNode.quantity);
+                const tableRowWrapperNode = document.createElement("div");
+                tableRowWrapperNode.className = "cart-row-node";
+                tableRowWrapperNode.innerHTML = `
+                    <div class="cart-product-cell">
+                        <img src="${cartItemNode.product.img}">
+                        <div>
+                            <h4 style="font-size:15px; margin-bottom:4px;">${cartItemNode.product.name}</h4>
+                            <p style="font-size:12px; color:var(--text-secondary);">Size: ${cartItemNode.selectedSize}</p>
+                        </div>
+                    </div>
+                    <div style="font-weight:600;">$${cartItemNode.product.price.toLocaleString()}</div>
+                    <div>
+                        <div class="pdp-qty-selector" style="margin-bottom:0; height:36px; width:110px;">
+                            <button class="qty-btn" onclick="adjustCartItemQtyInline(${indexInCartArray}, -1)">-</button>
+                            <input type="text" class="qty-input" value="${cartItemNode.quantity}" readonly>
+                            <button class="qty-btn" onclick="adjustCartItemQtyInline(${indexInCartArray}, 1)">+</button>
+                        </div>
+                        <button class="mini-cart-remove-trigger" style="margin-top:8px; display:block;" onclick="triggerDestructiveDeletionPopup(${indexInCartArray})">Delete Item</button>
+                    </div>
+                    <div class="cart-cell-total" style="text-align: right; font-weight:700;">$${(cartItemNode.product.price * cartItemNode.quantity).toLocaleString()}</div>
+                `;
+                cartPageTargetPoint.appendChild(tableRowWrapperNode);
+            });
+
+            cartSummaryTargetPoint.innerHTML = `
+                <div style="font-size: 20px; font-weight:700; text-transform:uppercase; margin-bottom:12px;">
+                    Subtotal: $${computedFinancialSubtotalValue.toLocaleString(undefined, {minimumFractionDigits: 2})}
+                </div>
+                <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px;">Shipping charges and taxes will be added at checkout.</p>
+                <button class="shopify-btn" style="width:320px;" onclick="navigateTo('checkout-view')">Proceed To Checkout</button>
+            `;
+        }
+
+        /* CUSTOM MODAL SYSTEM SWITCHBOARD CORE */
+        let TRACKING_INDEX_TARGETED_FOR_DELETION = null;
+
+        function triggerDestructiveDeletionPopup(cartIndexID) {
+            TRACKING_INDEX_TARGETED_FOR_DELETION = cartIndexID;
+            
+            const actionRowTargetNode = document.getElementById("popup-action-row-target");
+            actionRowTargetNode.innerHTML = `
+                <button class="shopify-btn" style="background-color:#DC2626; border-color:#DC2626; padding:10px 20px; font-size:12px;" onclick="confirmItemDeleteAction()">Delete Item</button>
+                <button class="shopify-btn shopify-btn-secondary" style="padding:10px 20px; font-size:12px;" onclick="closeCustomPopup()">Cancel</button>
+            `;
+
+            openCustomPopup("Remove Item", "Are you sure you want to delete this product from your shopping cart?");
+        }
+
+        function confirmItemDeleteAction() {
+            if (TRACKING_INDEX_TARGETED_FOR_DELETION !== null) {
+                CLIENT_SHOPPING_CART.splice(TRACKING_INDEX_TARGETED_FOR_DELETION, 1);
+                TRACKING_INDEX_TARGETED_FOR_DELETION = null;
+                synchronizeGlobalCartInterfaceState();
+                closeCustomPopup();
+            }
+        }
+
+        function openCustomPopup(titleText, bodyText) {
+            document.getElementById("popup-title-target").innerText = titleText;
+            document.getElementById("popup-body-target").innerText = bodyText;
+            document.getElementById("custom-global-popup-system").classList.add("popup-visible");
+        }
+
+        function closeCustomPopup() {
+            document.getElementById("custom-global-popup-system").classList.remove("popup-visible");
+        }
+
+        /* CHECKOUT SUMMARY INJECTION PROTOCOL */
+        function renderCheckoutSummaryDomTree() {
+            const summaryPanelInjectionNode = document.getElementById("checkout-summary-injection-point");
+            if (!summaryPanelInjectionNode) return;
+            summaryPanelInjectionNode.innerHTML = "";
+
+            let ledgerFinancialTotalValue = 0;
+            let summaryMarkupBuffer = `<h4 style="text-transform:uppercase; font-size:15px; margin-bottom:20px; border-bottom:1px solid var(--border-color); padding-bottom:8px;">Your Order Summary</h4>`;
+
+            CLIENT_SHOPPING_CART.forEach(item => {
+                const calculatedItemCost = item.product.price * item.quantity;
+                ledgerFinancialTotalValue += calculatedItemCost;
+                summaryMarkupBuffer += `
+                    <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:12px; color:var(--text-secondary);">
+                        <span>${item.product.name} (x${item.quantity})</span>
+                        <span style="font-weight:600; color:var(--text-primary);">$${calculatedItemCost.toLocaleString()}</span>
+                    </div>
+                `;
+            });
+
+            summaryMarkupBuffer += `
+                <div style="border-top:1px solid var(--border-color); margin-top:20px; padding-top:16px; display:flex; justify-content:space-between; font-weight:700; font-size:18px; text-transform:uppercase;">
+                    <span>Total Amount</span>
+                    <span style="color:var(--accent);">$${ledgerFinancialTotalValue.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+                </div>
+            `;
+
+            summaryPanelInjectionNode.innerHTML = summaryMarkupBuffer;
+        }
+
+        function executeCheckoutOrder(submittalEvent) {
+            submittalEvent.preventDefault();
+            if (CLIENT_SHOPPING_CART.length === 0) {
+                const actionRowTargetNode = document.getElementById("popup-action-row-target");
+                actionRowTargetNode.innerHTML = `<button class="shopify-btn" style="padding: 10px 24px; font-size:12px;" onclick="closeCustomPopup()">OK</button>`;
+                openCustomPopup("Error", "Your shopping cart is empty. Please add items before checkout.");
+                return;
+            }
+            CLIENT_SHOPPING_CART = [];
+            synchronizeGlobalCartInterfaceState();
+            
+            const actionRowTargetNode = document.getElementById("popup-action-row-target");
+            actionRowTargetNode.innerHTML = `<button class="shopify-btn" style="padding: 10px 24px; font-size:12px;" onclick="closeCustomPopup()">OK</button>`;
+            
+            openCustomPopup("Success", "Thank you! Your order has been placed successfully.");
+            navigateTo('home-view');
+        }
+
+        /* PRODUCT REVIEWS ENGINE MANAGEMENT DOMAIN */
+        function renderPdpReviewsDataArray() {
+            const reviewsTargetDisplayNode = document.getElementById("reviews-list-target");
+            reviewsTargetDisplayNode.innerHTML = "";
+
+            if (!CURRENT_ACTIVE_PDP_PRODUCT.reviews || CURRENT_ACTIVE_PDP_PRODUCT.reviews.length === 0) {
+                reviewsTargetDisplayNode.innerHTML = `<p style="color:var(--text-secondary); font-size:14px; padding:12px 0;">No reviews written for this car yet. Be the first to share your thoughts!</p>`;
+                return;
+            }
+
+            CURRENT_ACTIVE_PDP_PRODUCT.reviews.forEach(reviewNode => {
+                const reviewWrapperElement = document.createElement("div");
+                reviewWrapperElement.className = "review-node";
+                reviewWrapperElement.innerHTML = `
+                    <div class="review-meta">
+                        <span class="review-author">${reviewNode.author}</span>
+                        <span class="review-stars">${"★".repeat(reviewNode.rating)}</span>
+                    </div>
+                    <div class="review-body">${reviewNode.body}</div>
+                `;
+                reviewsTargetDisplayNode.appendChild(reviewWrapperElement);
+            });
+        }
+
+        function handleReviewSubmission(submittalFormEvent) {
+            submittalFormEvent.preventDefault();
+            const authorInputField = document.getElementById("review-form-author");
+            const ratingSelectField = document.getElementById("review-form-rating");
+            const bodyInputField = document.getElementById("review-form-body");
+
+            const structuredNewReviewObject = {
+                author: authorInputField.value,
+                rating: parseInt(ratingSelectField.value),
+                body: bodyInputField.value
+            };
+
+            CURRENT_ACTIVE_PDP_PRODUCT.reviews.push(structuredNewReviewObject);
+            renderPdpReviewsDataArray();
+
+            authorInputField.value = "";
+            bodyInputField.value = "";
+            
+            const actionRowTargetNode = document.getElementById("popup-action-row-target");
+            actionRowTargetNode.innerHTML = `<button class="shopify-btn" style="padding: 10px 24px; font-size:12px;" onclick="closeCustomPopup()">OK</button>`;
+
+            openCustomPopup("Review Added", "Your review has been successfully posted below.");
+        }
+
+        /* CUSTOMER PROFILE SIMULATION OPERATIONS */
+        function processClientMockAuth(submittalEvent) {
+            submittalEvent.preventDefault();
+            USER_AUTHENTICATION_STATUS = true;
+            
+            const actionRowTargetNode = document.getElementById("popup-action-row-target");
+            actionRowTargetNode.innerHTML = `<button class="shopify-btn" style="padding: 10px 24px; font-size:12px;" onclick="closeCustomPopup()">OK</button>`;
+
+            openCustomPopup("Login Success", "You have successfully logged into your account dashboard.");
+            navigateTo('account-view');
+        }
+
+        function executeClientLogout() {
+            USER_AUTHENTICATION_STATUS = false;
+            
+            const actionRowTargetNode = document.getElementById("popup-action-row-target");
+            actionRowTargetNode.innerHTML = `<button class="shopify-btn" style="padding: 10px 24px; font-size:12px;" onclick="closeCustomPopup()">OK</button>`;
+
+            openCustomPopup("Logged Out", "You have safely logged out from your profile session.");
+            navigateTo('home-view');
+        }
+
+        function switchAccountDashboardTab(targetPanelIdCode, clickedNavigationTabElement) {
+            document.querySelectorAll(".account-sub-panel").forEach(panelNode => panelNode.classList.remove("active-panel-node"));
+            document.querySelectorAll(".account-nav-tab").forEach(tabNode => tabNode.classList.remove("active-tab-node"));
+
+            document.getElementById(targetPanelIdCode).classList.add("active-panel-node");
+            clickedNavigationTabElement.classList.add("active-tab-node");
+        }
+    </script>
+</body>
+</html>
