@@ -2265,6 +2265,20 @@ document.querySelectorAll(".nav-links a").forEach(linkItem => {
         }
     });
 });
+
+        // Close mobile menu when clicking outside of it
+document.addEventListener("click", function(event) {
+    const navLinksNode = document.getElementById("main-nav-links");
+    const menuToggleBtn = document.querySelector(".menu-toggle");
+    
+    // Check if the menu is currently open
+    if (navLinksNode && navLinksNode.classList.contains("mobile-open")) {
+        // If the click happened OUTSIDE both the menu panel and the toggle button, close it
+        if (!navLinksNode.contains(event.target) && !menuToggleBtn.contains(event.target)) {
+            navLinksNode.classList.remove("mobile-open");
+        }
+    }
+});
     </script>
 </body>
 </html>
