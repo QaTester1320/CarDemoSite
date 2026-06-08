@@ -297,6 +297,17 @@
         .slider-arrow-prev { left: 24px; }
         .slider-arrow-next { right: 24px; }
 
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: var(--shopify-black);
+    cursor: pointer;
+    padding: 4px;
+    z-index: 150;
+}
+        
         /* Featured Categories Workspace Layout */
         .section-headline {
             text-align: center;
@@ -1057,6 +1068,49 @@
             .slider-wrapper { height: 480px; }
             .slide-content-card h1 { font-size: 28px; }
         }
+
+@media (max-width: 768px) {
+    /* Show the hamburger icon button */
+    .menu-toggle { 
+        display: block; 
+    }
+
+    /* Convert the navigation list into a mobile-friendly side drawer panel */
+    .nav-links { 
+        display: none; 
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: -100%; /* Keeps it hidden off-screen initially */
+        width: 280px;
+        height: 100%;
+        background-color: var(--bg-main);
+        border-right: 1px solid var(--border-color);
+        padding: 100px 24px 24px 24px;
+        gap: 24px;
+        z-index: 140;
+        box-shadow: var(--shadow-md);
+        transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Class applied when clicking the hamburger icon button */
+    .nav-links.mobile-open {
+        display: flex;
+        left: 0;
+    }
+    
+    /* Adjust remaining media query setups */
+    .category-grid { grid-template-columns: 1fr; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    .slide-content-card { margin-left: 24px; margin-right: 24px; padding: 24px; }
+    .account-hub-grid { grid-template-columns: 1fr; }
+    .cart-table-header, .cart-row-node { grid-template-columns: 1.5fr 1fr 0.5fr; }
+    .cart-header-total, .cart-cell-total { display: none; }
+    .mini-cart-drawer { width: 100%; right: -100%; }
+}
+
+        
     </style>
 </head>
 <body>
@@ -1069,9 +1123,10 @@
     <!-- Navigation Header -->
     <header>
         <div class="container nav-container">
+            <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">☰</button>
             <div class="logo" onclick="navigateTo('home-view')">APEXHATCH</div>
             <nav>
-                <ul class="nav-links">
+                <ul class="nav-links" id="main-nav-links">
                     <li><a onclick="navigateTo('home-view')">Home</a></li>
                     <li><a onclick="navigateTo('category-view')">Catalog</a></li>
                     <li><a onclick="navigateTo('about-view')">About Us</a></li>
@@ -2193,6 +2248,23 @@
             document.getElementById(targetPanelIdCode).classList.add("active-panel-node");
             clickedNavigationTabElement.classList.add("active-tab-node");
         }
+
+        function toggleMobileMenu() {
+    const navLinksNode = document.getElementById("main-nav-links");
+    if (navLinksNode) {
+        navLinksNode.classList.toggle("mobile-open");
+    }
+}
+
+// Automatically close the mobile menu side drawer when any navigation link is clicked
+document.querySelectorAll(".nav-links a").forEach(linkItem => {
+    linkItem.addEventListener("click", () => {
+        const navLinksNode = document.getElementById("main-nav-links");
+        if (navLinksNode) {
+            navLinksNode.classList.remove("mobile-open");
+        }
+    });
+});
     </script>
 </body>
 </html>
